@@ -8,7 +8,7 @@ sense = SenseHat()
 sense.clear() #clear LCD screen
 
 # configure serial communication
-ser = serial.Serial('/dev/ttyACM1', 9600)
+ser = serial.Serial('/dev/ttyACM0', 57600)
 
 # ThingSpeak API key for test project channel
 myAPI = 'Z1VLP2N2B0GCYN01' 
@@ -26,29 +26,60 @@ def sensehat_data():
 
 def arduino_data():
     # read sensor values from Arduino
-    line = ser.readline().strip().decode('utf-8')
     print("getting arduino data")
-    values = line.split(",")
-    sound = int(values[0])
-    airQuality = int(values[1])
-    light = int(values[2])
+    soundValues = []
+    lightValues = []
+
+    # Read 20 values from Arduino and store them in an array for each sound and light sensor
+    for i in range(20):
+        line = ser.readline().strip().decode('utf-8')
+        print("getting arduino data",i)
+        values = line.split(",")
+    # check if there are three distinct values
+    if len(values) != 3:
+        print("Invalid data format, trying again...")
+    # recursively call the function to get valid data
+        return arduino_data()
+        soundValue = int(values[0]) # get sound values from index 0
+        soundValues.append(soundValue) # append sound values to the soundValues array
+        lightValue = int(values[2])
+        lightValues.append(lightValue) # append light values to the lightValues array
+
+    # Calculate noise level based on the differences between sound values
+    sound = 0
+    for i in range(1, len(soundValues)): # soundValues is array of 20 value
+        diff = abs(soundValues[i] - soundValues[i-1])
+        sound += diff
+    sound /= len(soundValues) - 1
     
-    return sound, airQuality, light
+    # Calculate light disturbance level based on the differences between light values
+    lightDisturbance = 0
+    for i in range(1, len(lightValues)):
+        diff = abs(lightValues[i] - lightValues[i-1])
+        lightDisturbance += diff
+    lightDisturbance /= len(lightValues) - 1
+    
+    unAdjustedAirQuality = int(values[1]) # get the air quality value at index 1
+    airQuality = (5/(unAdjustedAirQuality* (5.0/1023.0))-1)*20 # adjust the airQuality value to 
+    light = int(values[2]) # inclued the most recent light luminence to reflect brightness of room
+    
+    return sound, airQuality, light, lightDisturbance
 
 while True:
     
     temp, humid, press = sensehat_data()
-    sound, airQuality, light = arduino_data()
+    sound, airQuality, light, lightDisturbance = arduino_data()
+    print("noiselevel", sound)
     # Formatting to two decimal places for display
     print("Temperature = {:.2f}, Humidity = {:.2f}, Pressure = {:.2f}".format(temp,humid,press))
     # print sensor values from Arduimp
-    print("Sound = ", sound)
     print("Air Quality = ", airQuality)
     print("Light = ", light)
+    print("Light disturbance = ", lightDisturbance)
     # If reading is valid
     if isinstance(temp, float) and isinstance(humid, float) and isinstance(press, float):
         
-        jsonData = '{"api_key":"%s","field1":%f,"field2":%f,"field3":%f,"field4":%f,"field5":%f,"field6":%f}' % (myAPI, temp, humid, press, sound, airQuality, light)
+        jsonData = '{"api_key":"%s","field1":%f,"field2":%f,"field3":%f,"field4":%f,"field5":%f,"field6":%f,"field7":%f}' % (myAPI, temp, humid, press, sound, airQuality, light, lightDisturbance)
         print(jsonData)
 
         header = {"Content-Type": "application/json","Accept": "text/plain"} 
@@ -66,4 +97,5 @@ while True:
         print('Error')
         break
     
-    sleep(10)
+    sleep(2)
+
