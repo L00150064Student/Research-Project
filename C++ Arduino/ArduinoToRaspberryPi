@@ -1,20 +1,18 @@
-#code
+# Arduino code to get sensor data from analogue sensors attached to breadboard
 void setup() {
   // setup code here, to run once: baud rate set at 9600 - this will be used at Pi end to confirm serial connection
   Serial.begin(9600);
-
 }
 
 void loop() {
   // main code to read sensor data, to run repeatedly with a 10 second delay:
-  int sensorValue1 = analogRead(A0);
-  int sensorValue2 = analogRead(A2);
-  int sensorValue3 = digitalRead(2);
+  int sensorValue1 = analogRead(A0); // sound sensor
+  int sensorValue2 = analogRead(A1); // air quality sensor
+  int sensorValue3 = analogRead(A2); // light sensor
   Serial.print(sensorValue1);
   Serial.print(",");
   Serial.print(sensorValue2);
   Serial.print(",");
   Serial.println(sensorValue3);
   delay(1000);
-
 }
