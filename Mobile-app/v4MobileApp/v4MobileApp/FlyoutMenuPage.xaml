@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="v4MobileApp.FlyoutMenuPage"
+             xmlns:views="clr-namespace:v4MobileApp.Pages"
+             FlyoutBehavior="Flyout"
+             Title="FlyoutMenuPage"
+             >
+    
+    <!--Add gradient background to shell-->
+    <Shell.FlyoutBackground>
+        <LinearGradientBrush StartPoint="0,0"
+                         EndPoint="1,1">
+            <GradientStop Color="#FFFFFF"
+                      Offset="0.3" />
+            <GradientStop Color="#D9D9D9"
+                      Offset="0.4" />
+            <GradientStop Color="#6E6E6E"
+                      Offset="0.8" />
+        </LinearGradientBrush>
+    </Shell.FlyoutBackground>
+
+
+
+    <Shell.FlyoutHeader>
+        
+        <Grid RowDefinitions="*"
+              ColumnDefinitions="*,*,*"
+              
+              HeightRequest="100"
+              BackgroundColor="#FFFFFF">
+            <!--Add logo to fly out navigation-->
+            <Label Text="STUDY ROOM"
+                   FontSize="Medium"
+                   Grid.ColumnSpan="3"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"/>
+        </Grid>
+    </Shell.FlyoutHeader>
+ 
+    <!--Fly out headings and navigations-->
+
+    <FlyoutItem Title="Temperature" FlyoutIcon="temperature.png">
+        <ShellContent
+                Title="Temperature"
+                ContentTemplate="{DataTemplate views:SensorPage}"
+                Route="Temperature">
+        </ShellContent>
+    </FlyoutItem>
+    <FlyoutItem Title="Humidity" FlyoutIcon="humidity.png">
+        <ShellContent
+                Title="Humidity"
+                ContentTemplate="{DataTemplate views:SensorPage}"
+                Route="Humidity">
+        </ShellContent>
+    </FlyoutItem>
+    <FlyoutItem Title="Pressure" FlyoutIcon="pressure.png">
+        <ShellContent
+                Title="Pressure"
+                ContentTemplate="{DataTemplate views:SensorPage}"
+                Route="Pressure">
+        </ShellContent>
+    </FlyoutItem>
+    <FlyoutItem Title="Sound" FlyoutIcon="sound.png">
+        <ShellContent
+                Title="Sound"
+                ContentTemplate="{DataTemplate views:SensorPage}"
+                Route="Sound">
+        </ShellContent>
+    </FlyoutItem>
+    <FlyoutItem Title="Air Quality" FlyoutIcon="air_quality.png">
+        <ShellContent
+                Title="Air_Quality"
+                ContentTemplate="{DataTemplate views:SensorPage}"
+                Route="Air_Quality">
+        </ShellContent>
+    </FlyoutItem>
+    <FlyoutItem Title="Light" FlyoutIcon="light.png">
+        <ShellContent
+                Title="Light"
+                ContentTemplate="{DataTemplate views:SensorPage}"
+                Route="Light">
+        </ShellContent>
+    </FlyoutItem>
+
+</Shell>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:v4MobileApp.Models"
+             xmlns:viewModel="clr-namespace:v4MobileApp.ViewModels"
+             xmlns:converter="clr-namespace:v4MobileApp.Converter"
+             xmlns:controls="clr-namespace:Microsoft.Maui.Controls;assembly=Microsoft.Maui.Controls"
+             x:DataType="viewModel:SensorViewModel"
+             x:Class="v4MobileApp.Pages.SensorPage"
+             Title="{Binding Title}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:ToLowerConverter x:Key="ToLowerConverter" />
+            <converter:SliderValueToColorConverter x:Key="SliderValueToColorConverter" />
+            <Style TargetType="Slider">
+                <Setter Property="MaximumTrackColor" Value="White"/>
+                <Setter Property="ThumbColor" Value="Transparent"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Grid>
+        <RefreshView Command="{Binding GetSensorsCommand}"
+                 IsRefreshing="{Binding IsRefreshing}">
+            <VerticalStackLayout
+            Spacing="25"
+            Padding="30,0"
+            VerticalOptions="Center">
+                <Image
+                Source="{Binding Title, Converter={StaticResource ToLowerConverter}, StringFormat='{0}.png'}"
+                SemanticProperties.Description="{Binding Title, StringFormat='Image of {0} Sensor'}"
+                HeightRequest="250"
+                Margin="0,20,0,0"
+                HorizontalOptions="Center" />
+                <StackLayout>
+                    <Label Text="{Binding Title}" FontSize="Large" HorizontalOptions="Center" />
+                    <Label Text="{Binding SelectedSensorMessageOutput}" FontSize="Medium" HorizontalOptions="Center" Margin="0,20,0,20" />
+                    <Frame BackgroundColor="{Binding ScaledSensorValue, Converter={StaticResource SliderValueToColorConverter}}">
+                        <Frame BackgroundColor="#D9D9D9" Margin="10">
+                            <controls:Slider Value="{Binding ScaledSensorValue}" Maximum="10" Minimum="0" HeightRequest="30" InputTransparent="True"
+                            MinimumTrackColor="{Binding ScaledSensorValue, Converter={StaticResource SliderValueToColorConverter}}"
+                            />
+                        </Frame>
+                    </Frame>
+                </StackLayout>
+                <Label Text="Data received:" FontSize="Large" HorizontalOptions="Center" Margin="0,20,0,0" />
+                <Label Text="{Binding DateCreatedAt}" FontSize="Medium" HorizontalOptions="Center" Margin="0,0,0,0" />
+            </VerticalStackLayout>
+        </RefreshView>
+
+        <ActivityIndicator IsVisible="{Binding IsBusy}"
+                       IsRunning="{Binding IsBusy}"
+                       HorizontalOptions="Center"
+                       VerticalOptions="CenterAndExpand"/>
+    </Grid>
+</ContentPage>
