@@ -13,7 +13,7 @@ To get started, clone the repository to your local machine. You'll need the foll
         - .NET 7 specifications
         - MAUI SDK
 
-#Folder Structure
+# Folder Structure
 
 The repository is organized into the following folders:
 
