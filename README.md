@@ -2,6 +2,7 @@
 
 
 This repository contains the code for a project that collects sensor data from an Arduino board and sends it to a cloud storage platform called ThingSpeak. It includes code for the Arduino, Raspberry Pi, a Thingspeak channel, and a mobile application built with Dotnet 7 MAUI.
+ThingSpeak channel: https://thingspeak.com/channels/1954302
 Getting Started
 
 To get started, clone the repository to your local machine. You'll need the following IDEs and tools installed:
@@ -11,7 +12,10 @@ To get started, clone the repository to your local machine. You'll need the foll
         - inc Arduino IDE on Raspberry Pi OS
     Viaual Studio 2022
         - .NET 7 specifications
-        - MAUI SDK
+        - MAUI SDK (with following nuGet packages)
+            - RestSharp
+            - CommunityToolkit.MVVM
+            - Newtonsoft JSON
 
 # Folder Structure
 
