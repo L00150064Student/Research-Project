@@ -16,7 +16,6 @@ public partial class SensorViewModel : BaseViewModel
     public ObservableCollection<SensorData> Sensors { get; set; } = new ObservableCollection<SensorData>();
     private string _selectedSensorMessageOutput;
     private int _sliderValue;
-    private int _dateCreatedAt;
 
     [ObservableProperty]
     bool isRefreshing;
@@ -34,35 +33,51 @@ public partial class SensorViewModel : BaseViewModel
         if (IsBusy)
             return;
 
-        var sensors = await _thingspeakService.GetSensorDataAsync();
-
         Debug.WriteLine("getting sensor list");
         try
         {
             IsBusy = true;
-            if (sensors.Count != 0)
+            var sensors = await _thingspeakService.GetSensorDataAsync();
+
+            if (sensors != null && sensors.Count > 0)
+            {
                 Sensors.Clear(); //remove previous data and get most recent values
 
-            foreach (var item in sensors)
+                foreach (var item in sensors)
+                {
+                    Sensors.Add(item); // Add the item to the collection
+                }
+
+                UpdateSliderValue(); // Update the slider value based on the current title
+            }
+            else
             {
-                Sensors.Add(item); // Add the item to the collection
+                // Display an alert if the data is empty
+                await Shell.Current.DisplayAlert("Warning", "Sensor data is empty", "OK");
             }
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
-            // Display an alert if an exception is raised
-            await Shell.Current.DisplayAlert("Error", "Unable to get sensor information", "OK");
-
+            if (ex.Message == "No internet connection available.")
+            {
+                // if service detects no internet connection a catch is made and message displayed on sensorpage
+                SelectedSensorMessageOutput = ex.Message;
+            }
+            else
+            {
+                // Display an alert if an exception is raised
+                await Shell.Current.DisplayAlert("Error", "Unable to get sensor information.", "OK");
+            }
         }
         finally
         {
             // Finish/clean up code in here
             IsBusy = false;
         }
-        //await Shell.Current.Navigation.PopAsync();
-        UpdateSliderValue(); // Update the slider value based on the current title
     }
+
+
 
     public void UpdateSliderValue()
     {

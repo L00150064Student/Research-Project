@@ -1,45 +1,55 @@
 ﻿using Newtonsoft.Json;
-using v4MobileApp.Models;
 using RestSharp;
 
+using v4MobileApp.Models;
 
-namespace v4MobileApp.Services;
-
-public class ThingSpeakService : IThingSpeakService
+namespace v4MobileApp.Services
 {
-    RestClient client;
-    public ThingSpeakService()
+    public class ThingSpeakService : IThingSpeakService
     {
-        client = new RestClient("https://api.thingspeak.com");
-    }
-    public async Task<List<SensorData>> GetSensorDataAsync()
-    {
-        try
+        RestClient client;
+        public ThingSpeakService()
         {
-            var request = new RestRequest("/channels/1954302/feeds.json", RestSharp.Method.Get);
-            request.AddParameter("api_key", "Y4IBOATVHIKUEU43");
-            request.AddParameter("results", 1);
-            var response = await client.ExecuteAsync(request);
+            client = new RestClient("https://api.thingspeak.com");
+        }
 
-            if (response.ErrorException != null){
-                throw new Exception($"Error retrieving sensor data from ThingSpeak API: {response.ErrorMessage}", response.ErrorException);
+        public async Task<List<SensorData>> GetSensorDataAsync()
+        {
+            try
+            {
+                // Check for network connectivity
+                var networkAccess = Connectivity.NetworkAccess;
+                if (networkAccess != NetworkAccess.Internet)
+                {
+                    throw new Exception("No internet connection available.");
+                }
+
+                var request = new RestRequest("/channels/1954302/feeds.json", RestSharp.Method.Get);
+                request.AddParameter("api_key", "Y4IBOATVHIKUEU43");
+                request.AddParameter("results", 1);
+                var response = await client.ExecuteAsync(request);
+                Console.WriteLine($"Response Status Code: {response.StatusCode}");
+                Console.WriteLine($"Response Content: {response.Content}");
+
+                if (!response.IsSuccessful)
+                {
+                    throw new Exception($"Error retrieving sensor data from ThingSpeak API: {response.ErrorMessage}");
+                }
+
+                var wrapper = JsonConvert.DeserializeObject<FeedWrapper>(response.Content);
+                var data = wrapper.feeds;
+                return data;
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception in GetSensorDataAsync: {ex.Message}");
+                throw; // throw the exception
+            }
+        }
 
-            var wrapper = JsonConvert.DeserializeObject<FeedWrapper>(response.Content);
-            var data = wrapper.feeds; // from the wrapper function
-            return data;
-        }
-        catch (Exception ex)
+        public class FeedWrapper
         {
-            // Handle the exception by displaying error message 
-            Console.WriteLine($"Exception in GetSensorDataAsync: {ex.Message}");
-            throw; // throw the exception
+            public List<SensorData> feeds { get; set; }
         }
-    }
-    public class FeedWrapper
-    {
-        // the JSON response from ThingSpeak includes both metadata about the channel and an array of "feeds" which contains the actual sensor data.
-        // In order to access the sensor data this Wrapper function will act as a container to accept the data
-        public List<SensorData> feeds { get; set; }
     }
 }
