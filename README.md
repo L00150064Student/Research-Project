@@ -5,7 +5,7 @@ This repository contains the code for a project that collects sensor data from a
 # Cloud Storage
 ThingSpeak channel: https://thingspeak.com/channels/1954302
 
-Getting Started
+# Getting Started
 
 To get started, clone the repository to your local machine. You'll need the following IDEs and tools installed:
 
