@@ -2,7 +2,9 @@
 
 
 This repository contains the code for a project that collects sensor data from an Arduino board and sends it to a cloud storage platform called ThingSpeak. It includes code for the Arduino, Raspberry Pi, a Thingspeak channel, and a mobile application built with Dotnet 7 MAUI.
+# Cloud Storage
 ThingSpeak channel: https://thingspeak.com/channels/1954302
+
 Getting Started
 
 To get started, clone the repository to your local machine. You'll need the following IDEs and tools installed:
