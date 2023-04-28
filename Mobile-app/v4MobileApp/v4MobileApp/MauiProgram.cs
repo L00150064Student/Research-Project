@@ -18,11 +18,9 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			});
-        
-        //Routing.RegisterRoute(nameof(SensorPage), typeof(SensorPage));
+
         // Register the services
-        builder.Services.AddSingleton<ThingSpeakService>();
-        
+        builder.Services.AddTransient<IThingSpeakService, ThingSpeakService>();
 
         // Register the view model with the dependency injection container
         builder.Services.AddSingleton<BaseViewModel>();

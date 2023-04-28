@@ -10,7 +10,7 @@ namespace v4MobileApp.ViewModels;
 
 public partial class SensorViewModel : BaseViewModel
 {
-    ThingSpeakService _thingspeakService;
+    IThingSpeakService _thingspeakService;
     //IThingSpeakService _dataService;
 
     public ObservableCollection<SensorData> Sensors { get; set; } = new ObservableCollection<SensorData>();
@@ -21,7 +21,7 @@ public partial class SensorViewModel : BaseViewModel
     [ObservableProperty]
     bool isRefreshing;
 
-    public SensorViewModel(ThingSpeakService thingspeakService)
+    public SensorViewModel(IThingSpeakService thingspeakService)
     {
         _thingspeakService = thingspeakService;
         //_dataService = dataService;

@@ -4,8 +4,7 @@
              x:Class="v4MobileApp.FlyoutMenuPage"
              xmlns:views="clr-namespace:v4MobileApp.Pages"
              FlyoutBehavior="Flyout"
-             Title="FlyoutMenuPage"
-             >
+             Title="FlyoutMenuPage">
     
     <!--Add gradient background to shell-->
     <Shell.FlyoutBackground>
@@ -20,16 +19,12 @@
         </LinearGradientBrush>
     </Shell.FlyoutBackground>
 
-
-
     <Shell.FlyoutHeader>
-        
         <Grid RowDefinitions="*"
               ColumnDefinitions="*,*,*"
-              
               HeightRequest="100"
               BackgroundColor="#FFFFFF">
-            <!--Add logo to fly out navigation-->
+            <!--Add label to fly out navigation-->
             <Label Text="STUDY ROOM"
                    FontSize="Medium"
                    Grid.ColumnSpan="3"
@@ -37,9 +32,7 @@
                    VerticalOptions="Center"/>
         </Grid>
     </Shell.FlyoutHeader>
- 
     <!--Fly out headings and navigations-->
-
     <FlyoutItem Title="Temperature" FlyoutIcon="temperature.png">
         <ShellContent
                 Title="Temperature"
@@ -82,5 +75,4 @@
                 Route="Light">
         </ShellContent>
     </FlyoutItem>
-
 </Shell>
