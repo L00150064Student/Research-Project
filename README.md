@@ -21,7 +21,7 @@ To get started, clone the repository to your local machine. You'll need the foll
 
 # Folder Structure
 
-The repository is organized into the following folders:
+The repository is organised into the following folders:
 
     arduino: contains the code for the Arduino board that collects sensor data and sends it to the Raspberry Pi via serial cable.
     raspberry-pi: contains the code for the Raspberry Pi that receives data from the Arduino and sends it to ThingSpeak using Python.
